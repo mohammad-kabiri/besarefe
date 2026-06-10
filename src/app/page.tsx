@@ -2,6 +2,7 @@ import ComparisonResult from "@/components/ComparisonResult";
 import OutputUnitSelector from "@/components/OutputUnitSelector";
 import ProductForm from "@/components/ProductForm";
 import ProductList from "@/components/ProductList";
+import SaveCurrentComparisonButton from "@/components/SaveCurrentComparisonButton";
 
 export default function Home() {
   return (
@@ -22,16 +23,7 @@ export default function Home() {
       <OutputUnitSelector />
       <ProductList />
       <ComparisonResult />
-
-      <section className="rounded-2xl border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-600 shadow-sm">
-        <button
-          className="min-h-12 w-full cursor-not-allowed rounded-xl bg-slate-200 px-4 py-3 font-semibold text-slate-500"
-          disabled
-          type="button"
-        >
-          ذخیره مقایسه - در مرحله بعد
-        </button>
-      </section>
+      <SaveCurrentComparisonButton />
     </main>
   );
 }
