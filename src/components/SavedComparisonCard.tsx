@@ -34,7 +34,7 @@ function getSaveModeLabel(saveMode: SavedComparison["saveMode"]): string {
     case "all":
       return "همه محصولات";
     case "best-only":
-      return "فقط به‌صرفه‌ترین محصول";
+      return "فقط بصرفه‌ترین";
     default: {
       const exhaustiveCheck: never = saveMode;
       return exhaustiveCheck;
@@ -76,16 +76,16 @@ export default function SavedComparisonCard({
   }
 
   return (
-    <article className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+    <article className="rounded-[1.75rem] border border-[var(--color-border)] bg-white p-4 shadow-sm sm:p-5">
       <div className="space-y-4">
         {editingTitle ? (
-          <div className="space-y-3 rounded-2xl border border-blue-200 bg-blue-50 p-3">
+          <div className="space-y-3 rounded-3xl border border-teal-200 bg-teal-50 p-3">
             <label className="block" htmlFor={`title-${comparison.id}`}>
-              <span className="mb-1 block text-sm font-medium text-blue-900">
+              <span className="mb-1 block text-sm font-bold text-[var(--color-primary-strong)]">
                 عنوان
               </span>
               <input
-                className="h-12 w-full rounded-xl border border-blue-200 bg-white px-3 text-base text-slate-950 outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+                className="h-13 min-h-13 w-full rounded-2xl border border-teal-200 bg-white px-4 text-base font-medium text-[var(--color-text)] outline-none transition focus:border-[var(--color-primary)] focus:ring-4 focus:ring-teal-100"
                 id={`title-${comparison.id}`}
                 onChange={(event) => setTitleDraft(event.target.value)}
                 type="text"
@@ -94,7 +94,7 @@ export default function SavedComparisonCard({
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
-                className="min-h-11 rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
+                className="min-h-12 rounded-2xl bg-[var(--color-primary)] px-3 py-2 text-sm font-black text-white transition hover:bg-[var(--color-primary-strong)] focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
                 disabled={titleDraft.trim() === ""}
                 onClick={handleSaveTitle}
                 type="button"
@@ -102,7 +102,7 @@ export default function SavedComparisonCard({
                 ذخیره عنوان
               </button>
               <button
-                className="min-h-11 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200"
+                className="min-h-12 rounded-2xl border border-[var(--color-border)] bg-white px-3 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-100"
                 onClick={handleCancelEdit}
                 type="button"
               >
@@ -113,24 +113,26 @@ export default function SavedComparisonCard({
         ) : (
           <div className="space-y-3">
             <div>
-              <h2 className="break-words text-lg font-bold text-slate-950">
+              <h2 className="break-words text-xl font-black text-[var(--color-text)]">
                 {comparison.title}
               </h2>
-              <p className="mt-1 text-sm text-slate-500">ایجاد: {createdAt}</p>
+              <p className="mt-1 text-sm text-[var(--color-muted)]">
+                ایجاد: {createdAt}
+              </p>
               {showUpdatedAt ? (
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-[var(--color-muted)]">
                   ویرایش: {updatedAt}
                 </p>
               ) : null}
             </div>
             <div className="flex flex-wrap gap-2">
-              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+              <span className="rounded-full bg-teal-100 px-3 py-1 text-xs font-bold text-[var(--color-primary-strong)]">
                 {getSaveModeLabel(comparison.saveMode)}
               </span>
-              <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800">
+              <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
                 {formatNumber(comparison.products.length)} محصول
               </span>
-              <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
+              <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
                 {OUTPUT_UNIT_LABELS[comparison.outputUnit]}
               </span>
             </div>
@@ -138,9 +140,9 @@ export default function SavedComparisonCard({
         )}
 
         {recommendation ? (
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-sm">
-            <p className="font-bold text-emerald-950">
-              به‌صرفه‌ترین: {getDisplayName(recommendation.cheapest)}
+          <div className="rounded-3xl border border-emerald-200 bg-emerald-50 p-3 text-sm">
+            <p className="font-black text-emerald-950">
+              بصرفه‌ترین: {getDisplayName(recommendation.cheapest)}
             </p>
             <p className="mt-1 text-emerald-800">
               قیمت واحد: {formatToman(recommendation.cheapest.unitPrice)}
@@ -153,28 +155,28 @@ export default function SavedComparisonCard({
             ) : null}
           </div>
         ) : (
-          <p className="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-800">
+          <p className="rounded-3xl border border-amber-200 bg-[var(--color-warning-soft)] px-3 py-2 text-sm leading-7 text-amber-800">
             نتیجه قابل محاسبه‌ای برای این ذخیره وجود ندارد.
           </p>
         )}
 
         <div className="grid gap-2 sm:grid-cols-3">
           <button
-            className="min-h-12 rounded-xl bg-emerald-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="min-h-12 rounded-2xl bg-[var(--color-primary)] px-3 py-2 text-sm font-black text-white transition hover:bg-[var(--color-primary-strong)] focus:outline-none focus:ring-4 focus:ring-teal-100"
             onClick={() => onLoad(comparison)}
             type="button"
           >
             بارگذاری
           </button>
           <button
-            className="min-h-12 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200"
+            className="min-h-12 rounded-2xl border border-[var(--color-border)] bg-white px-3 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-100"
             onClick={() => setEditingTitle(true)}
             type="button"
           >
             ویرایش عنوان
           </button>
           <button
-            className="min-h-12 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-200"
+            className="min-h-12 rounded-2xl bg-rose-50 px-3 py-2 text-sm font-bold text-rose-700 transition hover:bg-rose-100 focus:outline-none focus:ring-4 focus:ring-rose-100"
             onClick={() => onDelete(comparison.id)}
             type="button"
           >

@@ -68,39 +68,40 @@ export default function SaveComparisonModal({
     <div
       aria-labelledby="save-comparison-title"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-end bg-slate-950/60 p-3 sm:items-center sm:justify-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end bg-slate-950/55 p-3 sm:items-center sm:justify-center sm:p-4"
       role="dialog"
     >
-      <div className="max-h-[92vh] w-full overflow-y-auto rounded-3xl bg-white p-4 shadow-2xl sm:max-w-md sm:p-5">
+      <div className="max-h-[92vh] w-full overflow-y-auto rounded-[2rem] bg-white p-5 shadow-2xl sm:max-w-md sm:p-6">
         <div className="space-y-2">
           <h2
-            className="text-xl font-black text-slate-950"
+            className="text-2xl font-black text-[var(--color-text)]"
             id="save-comparison-title"
           >
             ذخیره مقایسه
           </h2>
-          <p className="text-sm leading-6 text-slate-600">
-            می‌خواهید این مقایسه را چگونه ذخیره کنید؟
+          <p className="text-sm leading-7 text-[var(--color-muted)]">
+            می‌توانید همه محصولات را ذخیره کنید یا فقط گزینه بصرفه‌تر را نگه
+            دارید.
           </p>
         </div>
 
-        <div className="mt-4 grid gap-2 rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
+        <div className="mt-4 grid gap-2 rounded-3xl bg-slate-50 p-4 text-sm text-slate-700">
           <p>
             تعداد محصولات:{" "}
-            <span className="font-bold">{formatNumber(products.length)}</span>
+            <span className="font-black">{formatNumber(products.length)}</span>
           </p>
           <p>
-            واحد خروجی:{" "}
-            <span className="font-bold">{OUTPUT_UNIT_LABELS[outputUnit]}</span>
+            واحد مقایسه:{" "}
+            <span className="font-black">{OUTPUT_UNIT_LABELS[outputUnit]}</span>
           </p>
         </div>
 
         <label className="mt-4 block" htmlFor="save-title">
-          <span className="mb-1 block text-sm font-medium text-slate-800">
+          <span className="mb-1 block text-sm font-bold text-slate-800">
             عنوان ذخیره
           </span>
           <input
-            className="h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+            className="h-13 min-h-13 w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 text-base font-medium text-[var(--color-text)] outline-none transition placeholder:text-slate-400 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-teal-100"
             disabled={isSaving}
             id="save-title"
             onChange={(event) => setTitle(event.target.value)}
@@ -112,7 +113,7 @@ export default function SaveComparisonModal({
 
         {errorMessage ? (
           <p
-            className="mt-3 rounded-2xl border border-red-200 bg-red-50 px-3 py-2 text-sm leading-6 text-red-700"
+            className="mt-3 rounded-3xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm leading-7 text-rose-700"
             role="alert"
           >
             {errorMessage}
@@ -120,14 +121,14 @@ export default function SaveComparisonModal({
         ) : null}
 
         {successMessage ? (
-          <p className="mt-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm leading-6 text-emerald-700">
+          <p className="mt-3 rounded-3xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-7 text-emerald-700">
             {successMessage}
           </p>
         ) : null}
 
         <div className="mt-5 space-y-2">
           <button
-            className="min-h-12 w-full rounded-xl bg-emerald-700 px-4 py-3 text-base font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200 disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="min-h-13 w-full rounded-2xl bg-[var(--color-primary)] px-5 py-3 text-base font-black text-white shadow-sm transition hover:bg-[var(--color-primary-strong)] focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:bg-slate-300"
             disabled={isSaving || !hasProducts}
             onClick={() => handleSave("all")}
             type="button"
@@ -136,18 +137,18 @@ export default function SaveComparisonModal({
           </button>
 
           <button
-            className="min-h-12 w-full rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-base font-semibold text-emerald-800 transition hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-200 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
+            className="min-h-13 w-full rounded-2xl border border-teal-200 bg-teal-50 px-5 py-3 text-base font-black text-[var(--color-primary-strong)] transition hover:bg-teal-100 focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
             disabled={isSaving || !hasProducts}
             onClick={() => handleSave("best-only")}
             type="button"
           >
             {savingMode === "best-only"
               ? "در حال ذخیره..."
-              : "فقط ذخیره به‌صرفه‌ترین محصول"}
+              : "فقط گزینه بصرفه‌تر"}
           </button>
 
           <button
-            className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:text-slate-400"
+            className="min-h-13 w-full rounded-2xl border border-[var(--color-border)] bg-white px-5 py-3 text-base font-bold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-100 disabled:cursor-not-allowed disabled:text-slate-400"
             disabled={isSaving}
             onClick={onClose}
             type="button"

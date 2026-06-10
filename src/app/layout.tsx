@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
+import "@fontsource-variable/vazirmatn";
+
 import AppHeader from "@/components/AppHeader";
 
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "مقایسه قیمت واحد",
-  description: "مقایسه قیمت محصولات بر اساس وزن یا حجم",
+  title: "بصرفه",
+  description: "مقایسه سریع قیمت محصولات بر اساس وزن یا حجم",
+  applicationName: "بصرفه",
 };
 
 export default function RootLayout({

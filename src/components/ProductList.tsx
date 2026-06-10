@@ -9,26 +9,24 @@ export default function ProductList() {
 
   return (
     <section aria-labelledby="product-list-title" className="space-y-3">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h2 id="product-list-title" className="text-lg font-bold text-slate-950">
-            محصولات
-          </h2>
-          {products.length > 0 ? (
-            <p className="mt-1 text-sm text-slate-500">
-              تعداد محصولات: {formatNumber(products.length)}
-            </p>
-          ) : null}
-        </div>
+      <div>
+        <h2 id="product-list-title" className="text-xl font-black text-[var(--color-text)]">
+          محصولات واردشده
+        </h2>
+        {products.length > 0 ? (
+          <p className="mt-1 text-sm font-medium text-[var(--color-muted)]">
+            {formatNumber(products.length)} محصول
+          </p>
+        ) : null}
       </div>
 
       {products.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-slate-300 bg-white px-4 py-10 text-center shadow-sm">
-          <p className="text-base font-bold text-slate-800">
+        <div className="rounded-[2rem] border border-dashed border-[var(--color-border)] bg-white px-5 py-10 text-center shadow-sm">
+          <p className="text-lg font-black text-[var(--color-text)]">
             هنوز محصولی اضافه نشده است.
           </p>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            اولین محصول را از فرم بالا وارد کنید تا مقایسه شروع شود.
+          <p className="mt-2 text-sm leading-7 text-[var(--color-muted)]">
+            اولین محصول را از فرم بالا وارد کنید.
           </p>
         </div>
       ) : (

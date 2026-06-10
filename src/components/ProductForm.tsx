@@ -36,7 +36,7 @@ const EMPTY_FORM_VALUES: ProductFormValues = {
 };
 
 const inputClassName =
-  "h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100";
+  "h-13 min-h-13 w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 text-base font-medium text-[var(--color-text)] outline-none transition placeholder:text-slate-400 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-teal-100";
 
 function getFormValuesFromProduct(product: ProductInput): ProductFormValues {
   return {
@@ -64,6 +64,49 @@ function getProductFromForm(values: ProductFormValues): Omit<ProductInput, "id">
         ? 0
         : parseLocalizedNumber(values.discountValue),
   };
+}
+
+function FormGroup({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <fieldset className="space-y-3 rounded-3xl bg-slate-50/70 p-3 sm:p-4">
+      <legend className="px-1 text-sm font-black text-[var(--color-primary-strong)]">
+        {title}
+      </legend>
+      {children}
+    </fieldset>
+  );
+}
+
+function FieldLabel({
+  htmlFor,
+  label,
+  helper,
+  children,
+}: {
+  htmlFor: string;
+  label: string;
+  helper?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="block" htmlFor={htmlFor}>
+      <span className="mb-1 block text-sm font-bold text-slate-800">
+        {label}
+      </span>
+      {children}
+      {helper ? (
+        <span className="mt-1 block text-xs leading-6 text-[var(--color-muted)]">
+          {helper}
+        </span>
+      ) : null}
+    </label>
+  );
 }
 
 export default function ProductForm() {
@@ -156,211 +199,209 @@ function ProductFormInner({
   return (
     <section
       aria-labelledby="product-form-title"
-      className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+      className="rounded-[2rem] border border-[var(--color-border)] bg-[var(--color-surface)] p-4 shadow-sm sm:p-6"
     >
-      <div className="mb-4 space-y-2">
-        <h2 id="product-form-title" className="text-lg font-bold text-slate-950">
-          {isEditing ? "ویرایش محصول" : "افزودن محصول"}
-        </h2>
-        <p className="text-sm leading-6 text-slate-600">
-          اطلاعات محصول را وارد کنید. عددها می‌توانند فارسی، عربی یا انگلیسی
-          باشند.
+      <div className="mb-5 space-y-2">
+        <div className="flex items-center gap-3">
+          <span className="flex size-9 items-center justify-center rounded-2xl bg-[var(--color-primary-soft)] text-sm font-black text-[var(--color-primary-strong)]">
+            ۱
+          </span>
+          <h2
+            id="product-form-title"
+            className="text-xl font-black text-[var(--color-text)]"
+          >
+            {isEditing ? "ویرایش محصول" : "افزودن محصول"}
+          </h2>
+        </div>
+        <p className="text-sm leading-7 text-[var(--color-muted)]">
+          اطلاعات روی بسته‌بندی یا برچسب قیمت را وارد کنید.
         </p>
         {isEditing ? (
-          <p className="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium leading-6 text-amber-800">
+          <p className="rounded-2xl border border-amber-200 bg-[var(--color-warning-soft)] px-3 py-2 text-sm font-bold leading-6 text-amber-800">
             در حال ویرایش محصول انتخاب‌شده هستید.
           </p>
         ) : null}
       </div>
 
+      {errors.length > 0 ? (
+        <div
+          className="mb-4 rounded-3xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm leading-7 text-rose-700"
+          role="alert"
+        >
+          <p className="mb-1 font-black">این موارد را بررسی کنید:</p>
+          <ul className="list-inside list-disc space-y-1">
+            {errors.map((error) => (
+              <li key={`${error.field}-${error.message}`}>{error.message}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
       <form className="space-y-4" onSubmit={handleSubmit}>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block" htmlFor="product-name">
-            <span className="mb-1 block text-sm font-medium text-slate-800">
-              نام محصول
-            </span>
-            <input
-              className={inputClassName}
-              id="product-name"
-              onChange={(event) => updateField("name", event.target.value)}
-              placeholder="مثلاً رب گوجه"
-              type="text"
-              value={values.name}
-            />
-          </label>
+        <FormGroup title="مشخصات محصول">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <FieldLabel htmlFor="product-name" label="نام محصول">
+              <input
+                className={inputClassName}
+                id="product-name"
+                onChange={(event) => updateField("name", event.target.value)}
+                placeholder="رب گوجه"
+                type="text"
+                value={values.name}
+              />
+            </FieldLabel>
 
-          <label className="block" htmlFor="product-brand">
-            <span className="mb-1 block text-sm font-medium text-slate-800">
-              برند
-            </span>
-            <input
-              className={inputClassName}
-              id="product-brand"
-              onChange={(event) => updateField("brand", event.target.value)}
-              placeholder="اختیاری"
-              type="text"
-              value={values.brand}
-            />
-          </label>
-        </div>
+            <FieldLabel htmlFor="product-brand" label="برند، اختیاری">
+              <input
+                className={inputClassName}
+                id="product-brand"
+                onChange={(event) => updateField("brand", event.target.value)}
+                placeholder="تبرک"
+                type="text"
+                value={values.brand}
+              />
+            </FieldLabel>
+          </div>
+        </FormGroup>
 
-        <div className="grid gap-4 sm:grid-cols-[1fr_160px]">
-          <label className="block" htmlFor="product-amount">
-            <span className="mb-1 block text-sm font-medium text-slate-800">
-              وزن یا حجم
-            </span>
-            <NumericFormat
-              allowNegative={false}
-              allowedDecimalSeparators={[".", "٫"]}
-              aria-describedby="product-amount-help"
-              className={inputClassName}
-              decimalSeparator="."
-              id="product-amount"
-              inputMode="decimal"
-              onValueChange={(numberValues) =>
-                updateField("amount", numberValues.value)
-              }
-              placeholder="مثلاً 800 یا 1.5"
-              thousandSeparator=","
-              value={values.amount}
-            />
-            <span
-              className="mt-1 block text-xs leading-5 text-slate-500"
-              id="product-amount-help"
+        <FormGroup title="وزن یا حجم">
+          <div className="grid gap-3 sm:grid-cols-[1fr_170px]">
+            <FieldLabel
+              helper="مثلاً ۸۰۰ گرم یا ۱.۵ لیتر"
+              htmlFor="product-amount"
+              label="مقدار"
             >
-              مثلاً ۸۰۰ گرم یا ۱.۵ لیتر
-            </span>
-          </label>
-
-          <label className="block" htmlFor="product-unit">
-            <span className="mb-1 block text-sm font-medium text-slate-800">
-              واحد
-            </span>
-            <select
-              className={inputClassName}
-              id="product-unit"
-              onChange={(event) => updateField("unit", event.target.value as Unit)}
-              value={values.unit}
-            >
-              {INPUT_UNIT_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <label className="block" htmlFor="product-price">
-          <span className="mb-1 block text-sm font-medium text-slate-800">
-            قیمت اصلی به تومان
-          </span>
-          <NumericFormat
-            allowNegative={false}
-            aria-describedby="product-price-help"
-            className={inputClassName}
-            decimalScale={0}
-            id="product-price"
-            inputMode="numeric"
-            onValueChange={(numberValues) =>
-              updateField("originalPrice", numberValues.value)
-            }
-            placeholder="مثلاً 125,000"
-            thousandSeparator=","
-            value={values.originalPrice}
-          />
-          <span
-            className="mt-1 block text-xs leading-5 text-slate-500"
-            id="product-price-help"
-          >
-            قیمت را به تومان وارد کنید.
-          </span>
-        </label>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block" htmlFor="discount-type">
-            <span className="mb-1 block text-sm font-medium text-slate-800">
-              نوع تخفیف
-            </span>
-            <select
-              className={inputClassName}
-              id="discount-type"
-              onChange={(event) =>
-                updateField("discountType", event.target.value as DiscountType)
-              }
-              value={values.discountType}
-            >
-              {DISCOUNT_TYPE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          {values.discountType !== "none" ? (
-            <label className="block" htmlFor="discount-value">
-              <span className="mb-1 block text-sm font-medium text-slate-800">
-                مقدار تخفیف
-              </span>
               <NumericFormat
                 allowNegative={false}
                 allowedDecimalSeparators={[".", "٫"]}
-                aria-describedby="discount-value-help"
+                aria-describedby="product-amount-help"
                 className={inputClassName}
-                decimalScale={values.discountType === "percent" ? undefined : 0}
                 decimalSeparator="."
-                id="discount-value"
-                inputMode={
-                  values.discountType === "percent" ? "decimal" : "numeric"
-                }
+                id="product-amount"
+                inputMode="decimal"
                 onValueChange={(numberValues) =>
-                  updateField("discountValue", numberValues.value)
+                  updateField("amount", numberValues.value)
                 }
-                placeholder={values.discountType === "percent" ? "15" : "25,000"}
-                suffix={values.discountType === "percent" ? "%" : undefined}
+                placeholder="۸۰۰"
                 thousandSeparator=","
-                value={values.discountValue}
+                value={values.amount}
               />
-              <span
-                className="mt-1 block text-xs leading-5 text-slate-500"
-                id="discount-value-help"
+            </FieldLabel>
+
+            <FieldLabel htmlFor="product-unit" label="واحد">
+              <select
+                className={inputClassName}
+                id="product-unit"
+                onChange={(event) =>
+                  updateField("unit", event.target.value as Unit)
+                }
+                value={values.unit}
               >
-                {values.discountType === "percent"
-                  ? "درصد تخفیف بین ۰ تا ۱۰۰ باشد."
-                  : "مبلغ تخفیف به تومان است."}
-              </span>
-            </label>
-          ) : null}
-        </div>
-
-        {errors.length > 0 ? (
-          <div
-            className="rounded-2xl border border-red-200 bg-red-50 px-3 py-3 text-sm leading-6 text-red-700"
-            role="alert"
-          >
-            <p className="mb-1 font-bold">لطفاً این موارد را بررسی کنید:</p>
-            <ul className="list-inside list-disc space-y-1">
-              {errors.map((error) => (
-                <li key={`${error.field}-${error.message}`}>
-                  {error.message}
-                </li>
-              ))}
-            </ul>
+                {INPUT_UNIT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </FieldLabel>
           </div>
-        ) : null}
+        </FormGroup>
 
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <FormGroup title="قیمت">
+          <FieldLabel
+            helper="قیمت اصلی را به تومان وارد کنید."
+            htmlFor="product-price"
+            label="قیمت اصلی"
+          >
+            <NumericFormat
+              allowNegative={false}
+              aria-describedby="product-price-help"
+              className={inputClassName}
+              decimalScale={0}
+              id="product-price"
+              inputMode="numeric"
+              onValueChange={(numberValues) =>
+                updateField("originalPrice", numberValues.value)
+              }
+              placeholder="۱۲۵٬۰۰۰"
+              thousandSeparator=","
+              value={values.originalPrice}
+            />
+          </FieldLabel>
+        </FormGroup>
+
+        <FormGroup title="تخفیف">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <FieldLabel htmlFor="discount-type" label="نوع تخفیف">
+              <select
+                className={inputClassName}
+                id="discount-type"
+                onChange={(event) =>
+                  updateField("discountType", event.target.value as DiscountType)
+                }
+                value={values.discountType}
+              >
+                {DISCOUNT_TYPE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </FieldLabel>
+
+            {values.discountType !== "none" ? (
+              <FieldLabel
+                helper={
+                  values.discountType === "percent"
+                    ? "درصد تخفیف باید بین ۰ تا ۱۰۰ باشد."
+                    : "مبلغ تخفیف را به تومان وارد کنید."
+                }
+                htmlFor="discount-value"
+                label="مقدار تخفیف"
+              >
+                <NumericFormat
+                  allowNegative={false}
+                  allowedDecimalSeparators={[".", "٫"]}
+                  aria-describedby="discount-value-help"
+                  className={inputClassName}
+                  decimalScale={
+                    values.discountType === "percent" ? undefined : 0
+                  }
+                  decimalSeparator="."
+                  id="discount-value"
+                  inputMode={
+                    values.discountType === "percent" ? "decimal" : "numeric"
+                  }
+                  onValueChange={(numberValues) =>
+                    updateField("discountValue", numberValues.value)
+                  }
+                  placeholder={
+                    values.discountType === "percent" ? "۱۵" : "۲۵٬۰۰۰"
+                  }
+                  suffix={values.discountType === "percent" ? "%" : undefined}
+                  thousandSeparator=","
+                  value={values.discountValue}
+                />
+              </FieldLabel>
+            ) : (
+              <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-4 py-3 text-sm leading-7 text-[var(--color-muted)]">
+                اگر محصول تخفیف ندارد، همین گزینه را نگه دارید.
+              </div>
+            )}
+          </div>
+        </FormGroup>
+
+        <div className="flex flex-col gap-2 pt-1 sm:flex-row">
           <button
-            className="min-h-12 w-full rounded-xl bg-emerald-700 px-4 py-3 text-base font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200 sm:w-auto"
+            className="min-h-13 w-full rounded-2xl bg-[var(--color-primary)] px-5 py-3 text-base font-black text-white shadow-sm transition hover:bg-[var(--color-primary-strong)] focus:outline-none focus:ring-4 focus:ring-teal-100 sm:w-auto"
             type="submit"
           >
-            {isEditing ? "ذخیره تغییرات" : "افزودن محصول"}
+            {isEditing ? "ذخیره تغییرات" : "افزودن به مقایسه"}
           </button>
 
           {isEditing ? (
             <button
-              className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 sm:w-auto"
+              className="min-h-13 w-full rounded-2xl border border-[var(--color-border)] bg-white px-5 py-3 text-base font-bold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-100 sm:w-auto"
               onClick={cancelEdit}
               type="button"
             >

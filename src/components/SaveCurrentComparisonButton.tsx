@@ -12,23 +12,23 @@ export default function SaveCurrentComparisonButton() {
   const hasProducts = products.length > 0;
 
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-600 shadow-sm">
+    <section className="rounded-[2rem] border border-[var(--color-border)] bg-white p-4 shadow-sm sm:p-5">
       <button
-        className="min-h-12 w-full rounded-xl bg-slate-950 px-4 py-3 text-base font-bold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-300 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500"
+        className="min-h-13 w-full rounded-2xl bg-[var(--color-primary)] px-5 py-3 text-base font-black text-white shadow-sm transition hover:bg-[var(--color-primary-strong)] focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500 disabled:shadow-none"
         disabled={!hasProducts}
         onClick={() => setModalOpen(true)}
         type="button"
       >
-        ⭐ ذخیره مقایسه
+        ذخیره این مقایسه
       </button>
 
       {!hasProducts ? (
-        <p className="mt-2 rounded-2xl bg-slate-50 px-3 py-2 text-center text-sm text-slate-500">
-          برای ذخیره، ابتدا حداقل یک محصول وارد کنید.
+        <p className="mt-3 rounded-2xl bg-slate-50 px-3 py-2 text-center text-sm text-[var(--color-muted)]">
+          برای ذخیره، ابتدا یک محصول اضافه کنید.
         </p>
       ) : (
-        <p className="mt-2 text-center text-sm text-slate-500">
-          ذخیره روی همین دستگاه و داخل IndexedDB انجام می‌شود.
+        <p className="mt-3 text-center text-sm text-[var(--color-muted)]">
+          این مقایسه فقط روی همین دستگاه ذخیره می‌شود.
         </p>
       )}
 
