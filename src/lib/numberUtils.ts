@@ -27,8 +27,12 @@ export function normalizePersianDigits(value: string): string {
   return value.replace(/[۰-۹٠-٩]/g, (digit) => DIGIT_MAP[digit] ?? digit);
 }
 
+export function normalizeDecimalSeparator(value: string): string {
+  return value.replace(/[٫٬]/g, (separator) => (separator === "٫" ? "." : separator));
+}
+
 export function stripNumberSeparators(value: string): string {
-  return value.replace(/[,،\s\u00a0]/g, "");
+  return value.replace(/[,،٬\s\u00a0]/g, "");
 }
 
 export function parseLocalizedNumber(value: string | number): number {
@@ -42,8 +46,9 @@ export function parseLocalizedNumber(value: string | number): number {
     return NaN;
   }
 
-  const normalizedValue = normalizePersianDigits(trimmedValue);
-  const cleanedValue = stripNumberSeparators(normalizedValue);
+  const normalizedDigits = normalizePersianDigits(trimmedValue);
+  const normalizedDecimal = normalizeDecimalSeparator(normalizedDigits);
+  const cleanedValue = stripNumberSeparators(normalizedDecimal);
 
   if (cleanedValue === "") {
     return NaN;

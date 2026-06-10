@@ -116,7 +116,7 @@ export default function SavedComparisonsClient() {
 
       {error ? (
         <p
-          className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700"
+          className="rounded-3xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700"
           role="alert"
         >
           {error}
@@ -124,18 +124,22 @@ export default function SavedComparisonsClient() {
       ) : null}
 
       {loading ? (
-        <section className="rounded-2xl border border-slate-200 bg-white p-5 text-sm text-slate-600 shadow-sm">
-          در حال بارگذاری مقایسه‌های ذخیره‌شده...
+        <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          <p className="h-4 w-2/3 animate-pulse rounded-full bg-slate-200" />
+          <p className="mt-3 h-4 w-1/2 animate-pulse rounded-full bg-slate-100" />
         </section>
       ) : null}
 
       {!loading && savedComparisons.length === 0 ? (
-        <section className="rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-10 text-center shadow-sm">
-          <p className="text-base font-semibold text-slate-800">
+        <section className="rounded-3xl border border-dashed border-slate-300 bg-white px-4 py-10 text-center shadow-sm">
+          <p className="text-lg font-bold text-slate-800">
             هنوز مقایسه‌ای ذخیره نشده است.
           </p>
+          <p className="mt-2 text-sm leading-6 text-slate-500">
+            از صفحه مقایسه، محصولات را وارد کنید و گزینه ذخیره مقایسه را بزنید.
+          </p>
           <Link
-            className="mt-4 inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-700 px-4 py-3 text-base font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-700 px-4 py-3 text-base font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200"
             href="/"
           >
             شروع مقایسه جدید
@@ -144,7 +148,10 @@ export default function SavedComparisonsClient() {
       ) : null}
 
       {!loading && savedComparisons.length > 0 ? (
-        <section aria-label="فهرست مقایسه‌های ذخیره‌شده" className="space-y-3">
+        <section
+          aria-label="فهرست مقایسه‌های ذخیره‌شده"
+          className="space-y-3"
+        >
           {savedComparisons.map((comparison) => (
             <SavedComparisonCard
               comparison={comparison}

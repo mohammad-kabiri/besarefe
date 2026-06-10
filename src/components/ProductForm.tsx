@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { NumericFormat } from "react-number-format";
 
 import type { DiscountType, ProductInput, Unit } from "@/types/product";
 
@@ -34,6 +35,9 @@ const EMPTY_FORM_VALUES: ProductFormValues = {
   discountType: DEFAULT_DISCOUNT_TYPE,
   discountValue: "",
 };
+
+const inputClassName =
+  "h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100";
 
 function getFormValuesFromProduct(product: ProductInput): ProductFormValues {
   return {
@@ -146,43 +150,46 @@ function ProductFormInner({
   return (
     <section
       aria-labelledby="product-form-title"
-      className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+      className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
     >
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div>
-          <h2
-            id="product-form-title"
-            className="text-lg font-bold text-slate-950"
-          >
-            {isEditing ? "ویرایش محصول" : "افزودن محصول"}
-          </h2>
-          <p className="mt-1 text-sm leading-6 text-slate-600">
-            قیمت، مقدار و تخفیف را وارد کنید تا مقایسه به‌روز شود.
+      <div className="mb-4 space-y-2">
+        <h2 id="product-form-title" className="text-lg font-bold text-slate-950">
+          {isEditing ? "ویرایش محصول" : "افزودن محصول"}
+        </h2>
+        <p className="text-sm leading-6 text-slate-600">
+          اطلاعات محصول را وارد کنید. عددها می‌توانند فارسی، عربی یا انگلیسی
+          باشند.
+        </p>
+        {isEditing ? (
+          <p className="rounded-2xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium leading-6 text-amber-800">
+            در حال ویرایش محصول انتخاب‌شده هستید.
           </p>
-        </div>
+        ) : null}
       </div>
 
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block">
+          <label className="block" htmlFor="product-name">
             <span className="mb-1 block text-sm font-medium text-slate-800">
               نام محصول
             </span>
             <input
-              className="h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+              className={inputClassName}
+              id="product-name"
               onChange={(event) => updateField("name", event.target.value)}
-              placeholder="مثلا رب گوجه"
+              placeholder="مثلاً رب گوجه"
               type="text"
               value={values.name}
             />
           </label>
 
-          <label className="block">
+          <label className="block" htmlFor="product-brand">
             <span className="mb-1 block text-sm font-medium text-slate-800">
               برند
             </span>
             <input
-              className="h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+              className={inputClassName}
+              id="product-brand"
               onChange={(event) => updateField("brand", event.target.value)}
               placeholder="اختیاری"
               type="text"
@@ -192,26 +199,40 @@ function ProductFormInner({
         </div>
 
         <div className="grid gap-4 sm:grid-cols-[1fr_160px]">
-          <label className="block">
+          <label className="block" htmlFor="product-amount">
             <span className="mb-1 block text-sm font-medium text-slate-800">
               وزن یا حجم
             </span>
-            <input
-              className="h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+            <NumericFormat
+              allowNegative={false}
+              allowedDecimalSeparators={[".", "٫"]}
+              aria-describedby="product-amount-help"
+              className={inputClassName}
+              decimalSeparator="."
+              id="product-amount"
               inputMode="decimal"
-              onChange={(event) => updateField("amount", event.target.value)}
-              placeholder="مثلا ۵۰۰"
-              type="text"
+              onValueChange={(numberValues) =>
+                updateField("amount", numberValues.value)
+              }
+              placeholder="مثلاً 800 یا 1.5"
+              thousandSeparator=","
               value={values.amount}
             />
+            <span
+              className="mt-1 block text-xs leading-5 text-slate-500"
+              id="product-amount-help"
+            >
+              مثلاً ۸۰۰ گرم یا ۱.۵ لیتر
+            </span>
           </label>
 
-          <label className="block">
+          <label className="block" htmlFor="product-unit">
             <span className="mb-1 block text-sm font-medium text-slate-800">
               واحد
             </span>
             <select
-              className="h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+              className={inputClassName}
+              id="product-unit"
               onChange={(event) => updateField("unit", event.target.value as Unit)}
               value={values.unit}
             >
@@ -224,29 +245,40 @@ function ProductFormInner({
           </label>
         </div>
 
-        <label className="block">
+        <label className="block" htmlFor="product-price">
           <span className="mb-1 block text-sm font-medium text-slate-800">
-            قیمت اصلی
+            قیمت اصلی به تومان
           </span>
-          <input
-            className="h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+          <NumericFormat
+            allowNegative={false}
+            aria-describedby="product-price-help"
+            className={inputClassName}
+            decimalScale={0}
+            id="product-price"
             inputMode="numeric"
-            onChange={(event) =>
-              updateField("originalPrice", event.target.value)
+            onValueChange={(numberValues) =>
+              updateField("originalPrice", numberValues.value)
             }
-            placeholder="تومان"
-            type="text"
+            placeholder="مثلاً 125,000"
+            thousandSeparator=","
             value={values.originalPrice}
           />
+          <span
+            className="mt-1 block text-xs leading-5 text-slate-500"
+            id="product-price-help"
+          >
+            قیمت را به تومان وارد کنید.
+          </span>
         </label>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block">
+          <label className="block" htmlFor="discount-type">
             <span className="mb-1 block text-sm font-medium text-slate-800">
               نوع تخفیف
             </span>
             <select
-              className="h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
+              className={inputClassName}
+              id="discount-type"
               onChange={(event) =>
                 updateField("discountType", event.target.value as DiscountType)
               }
@@ -261,32 +293,48 @@ function ProductFormInner({
           </label>
 
           {values.discountType !== "none" ? (
-            <label className="block">
+            <label className="block" htmlFor="discount-value">
               <span className="mb-1 block text-sm font-medium text-slate-800">
                 مقدار تخفیف
               </span>
-              <input
-                className="h-12 w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-950 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-                inputMode="decimal"
-                onChange={(event) =>
-                  updateField("discountValue", event.target.value)
+              <NumericFormat
+                allowNegative={false}
+                allowedDecimalSeparators={[".", "٫"]}
+                aria-describedby="discount-value-help"
+                className={inputClassName}
+                decimalScale={values.discountType === "percent" ? undefined : 0}
+                decimalSeparator="."
+                id="discount-value"
+                inputMode={
+                  values.discountType === "percent" ? "decimal" : "numeric"
                 }
-                placeholder={
-                  values.discountType === "percent" ? "درصد" : "تومان"
+                onValueChange={(numberValues) =>
+                  updateField("discountValue", numberValues.value)
                 }
-                type="text"
+                placeholder={values.discountType === "percent" ? "15" : "25,000"}
+                suffix={values.discountType === "percent" ? "%" : undefined}
+                thousandSeparator=","
                 value={values.discountValue}
               />
+              <span
+                className="mt-1 block text-xs leading-5 text-slate-500"
+                id="discount-value-help"
+              >
+                {values.discountType === "percent"
+                  ? "درصد تخفیف بین ۰ تا ۱۰۰ باشد."
+                  : "مبلغ تخفیف به تومان است."}
+              </span>
             </label>
           ) : null}
         </div>
 
         {errors.length > 0 ? (
           <div
-            className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm leading-6 text-red-700"
+            className="rounded-2xl border border-red-200 bg-red-50 px-3 py-3 text-sm leading-6 text-red-700"
             role="alert"
           >
-            <ul className="space-y-1">
+            <p className="mb-1 font-bold">لطفاً این موارد را بررسی کنید:</p>
+            <ul className="list-inside list-disc space-y-1">
               {errors.map((error) => (
                 <li key={`${error.field}-${error.message}`}>
                   {error.message}
@@ -298,7 +346,7 @@ function ProductFormInner({
 
         <div className="flex flex-col gap-2 sm:flex-row">
           <button
-            className="min-h-12 rounded-xl bg-emerald-700 px-4 py-3 text-base font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200"
+            className="min-h-12 w-full rounded-xl bg-emerald-700 px-4 py-3 text-base font-semibold text-white transition hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-200 sm:w-auto"
             type="submit"
           >
             {isEditing ? "ذخیره تغییرات" : "افزودن محصول"}
@@ -306,7 +354,7 @@ function ProductFormInner({
 
           {isEditing ? (
             <button
-              className="min-h-12 rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200"
+              className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base font-semibold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-200 sm:w-auto"
               onClick={cancelEdit}
               type="button"
             >
