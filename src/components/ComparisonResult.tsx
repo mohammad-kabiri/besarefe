@@ -1,15 +1,17 @@
 "use client";
 
+import { useMemo } from "react";
+
 import type { ComparedProduct } from "@/types/product";
 
 import { OUTPUT_UNIT_LABELS } from "@/lib/constants";
-import { getDisplayName } from "@/lib/priceCalculator";
+import {
+  compareProducts,
+  getDisplayName,
+  getRecommendation,
+} from "@/lib/priceCalculator";
 import { formatNumber, formatPercent, formatToman } from "@/lib/numberUtils";
 import { useComparisonStore } from "@/store/comparisonStore";
-import {
-  selectComparedProducts,
-  selectCurrentRecommendation,
-} from "@/store/comparisonSelectors";
 
 function getResultItemClassName(
   product: ComparedProduct,
@@ -58,9 +60,16 @@ function getResultBadges(
 }
 
 export default function ComparisonResult() {
-  const comparedProducts = useComparisonStore(selectComparedProducts);
-  const recommendation = useComparisonStore(selectCurrentRecommendation);
+  const products = useComparisonStore((state) => state.products);
   const outputUnit = useComparisonStore((state) => state.outputUnit);
+  const comparedProducts = useMemo(
+    () => compareProducts(products, outputUnit),
+    [products, outputUnit]
+  );
+  const recommendation = useMemo(
+    () => getRecommendation(comparedProducts),
+    [comparedProducts]
+  );
   const outputUnitLabel = OUTPUT_UNIT_LABELS[outputUnit];
 
   if (comparedProducts.length < 1 || recommendation === null) {

@@ -7,6 +7,8 @@ import {
   getRecommendation,
 } from "@/lib/priceCalculator";
 
+// These selectors are pure helpers. Do not pass selectors that return newly
+// created arrays/objects directly to useComparisonStore in React components.
 export function selectComparedProducts(
   state: ComparisonState
 ): ComparedProduct[] {

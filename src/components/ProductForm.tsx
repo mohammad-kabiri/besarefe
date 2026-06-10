@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 import { NumericFormat } from "react-number-format";
 
 import type { DiscountType, ProductInput, Unit } from "@/types/product";
@@ -14,7 +14,6 @@ import {
 import { parseLocalizedNumber } from "@/lib/numberUtils";
 import { validateProductInput, type ValidationError } from "@/lib/validation";
 import { useComparisonStore } from "@/store/comparisonStore";
-import { selectEditingProduct } from "@/store/comparisonSelectors";
 
 type ProductFormValues = {
   name: string;
@@ -68,10 +67,17 @@ function getProductFromForm(values: ProductFormValues): Omit<ProductInput, "id">
 }
 
 export default function ProductForm() {
+  const products = useComparisonStore((state) => state.products);
   const editingProductId = useComparisonStore(
     (state) => state.editingProductId
   );
-  const editingProduct = useComparisonStore(selectEditingProduct);
+  const editingProduct = useMemo(
+    () =>
+      editingProductId === null
+        ? null
+        : products.find((product) => product.id === editingProductId) ?? null,
+    [products, editingProductId]
+  );
   const formKey = editingProduct?.id ?? "new-product";
 
   return (
