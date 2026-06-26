@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "بصرفه",
   description: "مقایسه سریع قیمت محصولات بر اساس وزن یا حجم",
   applicationName: "بصرفه",
+  icons: {
+    apple: "/icons/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     title: "بصرفه",

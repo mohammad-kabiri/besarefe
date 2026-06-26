@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import ComparisonResult from "@/components/ComparisonResult";
 import OutputUnitSelector from "@/components/OutputUnitSelector";
 import ProductForm from "@/components/ProductForm";
@@ -15,8 +17,15 @@ export default function Home() {
     <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-5 px-4 py-5 sm:py-8">
       <section className="overflow-hidden rounded-4xl border border-teal-100 bg-white p-5 shadow-sm sm:p-6">
         <div className="flex items-start gap-4">
-          <div className="hidden size-14 shrink-0 items-center justify-center rounded-3xl bg(--color-primary-soft) text-2xl font-black text-(--color-primary-strong) sm:flex">
-            ب
+          <div className="hidden size-14 shrink-0 items-center justify-center rounded-3xl bg(--color-primary-soft) sm:flex">
+            <Image
+              src="/icons/site-mark-transparent.svg"
+              alt=""
+              width={38}
+              height={38}
+              aria-hidden="true"
+              priority
+            />
           </div>
           <div className="min-w-0">
             <p className="text-sm font-bold text-(--color-primary)">

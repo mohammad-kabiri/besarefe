@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function AppHeader() {
@@ -5,8 +6,15 @@ export default function AppHeader() {
     <header className="sticky top-0 z-40 border-b border-[var(--color-border)] bg-white/92 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-3xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
         <Link className="flex items-center gap-3" href="/">
-          <span className="flex size-11 items-center justify-center rounded-2xl bg-[var(--color-primary)] text-xl font-black text-white shadow-sm">
-            ب
+          <span className="flex size-11 items-center justify-center rounded-2xl bg-[var(--color-primary-soft)] shadow-sm">
+            <Image
+              src="/icons/site-mark-transparent.svg"
+              alt=""
+              width={30}
+              height={30}
+              aria-hidden="true"
+              priority
+            />
           </span>
           <span className="leading-tight">
             <span className="block text-xl font-black text-[var(--color-text)]">
