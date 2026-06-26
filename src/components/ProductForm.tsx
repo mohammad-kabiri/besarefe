@@ -43,6 +43,69 @@ const EMPTY_FORM_VALUES: ProductFormValues = {
 const inputClassName =
   "h-13 min-h-13 w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 text-base font-medium text-[var(--color-text)] outline-none transition placeholder:text-slate-400 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-teal-100";
 
+const inputErrorClassName =
+  "border-rose-300 bg-rose-50/30 focus:border-rose-500 focus:ring-rose-100";
+
+const KNOWN_FORM_FIELDS = new Set([
+  "name",
+  "brand",
+  "amount",
+  "unit",
+  "originalPrice",
+  "discountType",
+  "discountValue",
+]);
+
+function getInputClassName(hasError: boolean): string {
+  return hasError
+    ? `${inputClassName} ${inputErrorClassName}`
+    : inputClassName;
+}
+
+function getFieldErrorId(field: string): string {
+  return `${field}-error`;
+}
+
+function getDescribedBy(...ids: Array<string | undefined>): string | undefined {
+  const describedBy = ids.filter(Boolean).join(" ");
+
+  return describedBy || undefined;
+}
+
+function createErrorsByField(errors: ValidationError[]): Map<string, string[]> {
+  const errorsByField = new Map<string, string[]>();
+
+  for (const error of errors) {
+    const fieldErrors = errorsByField.get(error.field) ?? [];
+    fieldErrors.push(error.message);
+    errorsByField.set(error.field, fieldErrors);
+  }
+
+  return errorsByField;
+}
+
+function FieldError({
+  field,
+  messages,
+}: {
+  field: string;
+  messages: string[];
+}) {
+  if (messages.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mt-2 space-y-1" id={getFieldErrorId(field)} role="alert">
+      {messages.map((message) => (
+        <p className="text-sm font-medium leading-6 text-rose-700" key={message}>
+          {message}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 function getFormValuesFromProduct(product: ProductInput): ProductFormValues {
   return {
     name: product.name,
@@ -92,11 +155,13 @@ function FieldLabel({
   htmlFor,
   label,
   helper,
+  helperId,
   children,
 }: {
   htmlFor: string;
   label: string;
   helper?: string;
+  helperId?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -106,7 +171,10 @@ function FieldLabel({
       </span>
       {children}
       {helper ? (
-        <span className="mt-1 block text-xs leading-6 text-[var(--color-muted)]">
+        <span
+          className="mt-1 block text-xs leading-6 text-[var(--color-muted)]"
+          id={helperId}
+        >
           {helper}
         </span>
       ) : null}
@@ -158,6 +226,17 @@ function ProductFormInner({
   const [errors, setErrors] = useState<ValidationError[]>([]);
 
   const isEditing = editingProductId !== null && editingProduct !== null;
+  const errorsByField = useMemo(() => createErrorsByField(errors), [errors]);
+  const unknownErrors = useMemo(
+    () => errors.filter((error) => !KNOWN_FORM_FIELDS.has(error.field)),
+    [errors]
+  );
+  const nameErrors = errorsByField.get("name") ?? [];
+  const amountErrors = errorsByField.get("amount") ?? [];
+  const unitErrors = errorsByField.get("unit") ?? [];
+  const originalPriceErrors = errorsByField.get("originalPrice") ?? [];
+  const discountTypeErrors = errorsByField.get("discountType") ?? [];
+  const discountValueErrors = errorsByField.get("discountValue") ?? [];
 
   function updateField<Key extends keyof ProductFormValues>(
     field: Key,
@@ -240,14 +319,14 @@ function ProductFormInner({
         ) : null}
       </div>
 
-      {errors.length > 0 ? (
+      {unknownErrors.length > 0 ? (
         <div
           className="mb-4 rounded-3xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm leading-7 text-rose-700"
           role="alert"
         >
           <p className="mb-1 font-black">این موارد را بررسی کنید:</p>
           <ul className="list-inside list-disc space-y-1">
-            {errors.map((error) => (
+            {unknownErrors.map((error) => (
               <li key={`${error.field}-${error.message}`}>{error.message}</li>
             ))}
           </ul>
@@ -259,13 +338,18 @@ function ProductFormInner({
           <div className="grid gap-3 sm:grid-cols-2">
             <FieldLabel htmlFor="product-name" label="نام محصول">
               <input
-                className={inputClassName}
+                aria-describedby={getDescribedBy(
+                  nameErrors.length > 0 ? getFieldErrorId("name") : undefined
+                )}
+                aria-invalid={nameErrors.length > 0}
+                className={getInputClassName(nameErrors.length > 0)}
                 id="product-name"
                 onChange={(event) => updateField("name", event.target.value)}
                 placeholder="رب گوجه"
                 type="text"
                 value={values.name}
               />
+              <FieldError field="name" messages={nameErrors} />
             </FieldLabel>
 
             <FieldLabel htmlFor="product-brand" label="برند، اختیاری">
@@ -285,14 +369,21 @@ function ProductFormInner({
           <div className="grid gap-3 sm:grid-cols-[1fr_170px]">
             <FieldLabel
               helper="مثلاً ۸۰۰ گرم یا ۱.۵ لیتر"
+              helperId="product-amount-help"
               htmlFor="product-amount"
               label="مقدار"
             >
               <NumericFormat
                 allowNegative={false}
                 allowedDecimalSeparators={[".", "٫"]}
-                aria-describedby="product-amount-help"
-                className={inputClassName}
+                aria-describedby={getDescribedBy(
+                  "product-amount-help",
+                  amountErrors.length > 0
+                    ? getFieldErrorId("amount")
+                    : undefined
+                )}
+                aria-invalid={amountErrors.length > 0}
+                className={getInputClassName(amountErrors.length > 0)}
                 decimalSeparator="."
                 id="product-amount"
                 inputMode="decimal"
@@ -303,9 +394,11 @@ function ProductFormInner({
                 thousandSeparator=","
                 value={values.amount}
               />
+              <FieldError field="amount" messages={amountErrors} />
             </FieldLabel>
 
             <CustomSelect<Unit>
+              error={unitErrors.join(" ")}
               helperText="واحدی را انتخاب کنید که روی بسته‌بندی نوشته شده است."
               id="product-unit"
               label="واحد"
@@ -319,13 +412,20 @@ function ProductFormInner({
         <FormGroup title="قیمت">
           <FieldLabel
             helper="قیمت اصلی را به تومان وارد کنید."
+            helperId="product-price-help"
             htmlFor="product-price"
             label="قیمت اصلی"
           >
             <NumericFormat
               allowNegative={false}
-              aria-describedby="product-price-help"
-              className={inputClassName}
+              aria-describedby={getDescribedBy(
+                "product-price-help",
+                originalPriceErrors.length > 0
+                  ? getFieldErrorId("originalPrice")
+                  : undefined
+              )}
+              aria-invalid={originalPriceErrors.length > 0}
+              className={getInputClassName(originalPriceErrors.length > 0)}
               decimalScale={0}
               id="product-price"
               inputMode="numeric"
@@ -336,12 +436,17 @@ function ProductFormInner({
               thousandSeparator=","
               value={values.originalPrice}
             />
+            <FieldError
+              field="originalPrice"
+              messages={originalPriceErrors}
+            />
           </FieldLabel>
         </FormGroup>
 
         <FormGroup title="تخفیف">
           <div className="grid gap-3 sm:grid-cols-2">
             <CustomSelect<DiscountType>
+              error={discountTypeErrors.join(" ")}
               id="discount-type"
               label="نوع تخفیف"
               onChange={(nextDiscountType) =>
@@ -358,14 +463,23 @@ function ProductFormInner({
                     ? "درصد تخفیف باید بین ۰ تا ۱۰۰ باشد."
                     : "مبلغ تخفیف را به تومان وارد کنید."
                 }
+                helperId="discount-value-help"
                 htmlFor="discount-value"
                 label="مقدار تخفیف"
               >
                 <NumericFormat
                   allowNegative={false}
                   allowedDecimalSeparators={[".", "٫"]}
-                  aria-describedby="discount-value-help"
-                  className={inputClassName}
+                  aria-describedby={getDescribedBy(
+                    "discount-value-help",
+                    discountValueErrors.length > 0
+                      ? getFieldErrorId("discountValue")
+                      : undefined
+                  )}
+                  aria-invalid={discountValueErrors.length > 0}
+                  className={getInputClassName(
+                    discountValueErrors.length > 0
+                  )}
                   decimalScale={
                     values.discountType === "percent" ? undefined : 0
                   }
@@ -383,6 +497,10 @@ function ProductFormInner({
                   suffix={values.discountType === "percent" ? "%" : undefined}
                   thousandSeparator=","
                   value={values.discountValue}
+                />
+                <FieldError
+                  field="discountValue"
+                  messages={discountValueErrors}
                 />
               </FieldLabel>
             ) : (
