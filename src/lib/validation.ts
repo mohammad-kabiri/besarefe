@@ -31,6 +31,14 @@ function isValidAmount(product: ProductInput): boolean {
   return Number.isFinite(product.amount) && product.amount > 0;
 }
 
+function getProductFamily(product: ProductInput): UnitFamily | null {
+  try {
+    return getUnitFamily(product.unit);
+  } catch {
+    return null;
+  }
+}
+
 export function validateProductInput(
   product: ProductInput
 ): ValidationResult {
@@ -99,7 +107,9 @@ export function validateOutputUnitCompatibility(
       return false;
     }
 
-    return getUnitFamily(product.unit) !== outputFamily;
+    const productFamily = getProductFamily(product);
+
+    return productFamily !== null && productFamily !== outputFamily;
   });
 
   if (!hasIncompatibleProduct) {
@@ -127,10 +137,20 @@ export function getProductFamilySummary(products: ProductInput[]): {
     };
   }
 
-  const hasMass = products.some((product) => getUnitFamily(product.unit) === "mass");
-  const hasVolume = products.some(
-    (product) => getUnitFamily(product.unit) === "volume"
-  );
+  const productFamilies = products
+    .map((product) => getProductFamily(product))
+    .filter((family): family is UnitFamily => family !== null);
+
+  if (productFamilies.length === 0) {
+    return {
+      hasMass: false,
+      hasVolume: false,
+      family: "empty",
+    };
+  }
+
+  const hasMass = productFamilies.includes("mass");
+  const hasVolume = productFamilies.includes("volume");
 
   if (hasMass && hasVolume) {
     return {

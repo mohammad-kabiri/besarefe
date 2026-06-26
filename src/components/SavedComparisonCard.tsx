@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import type { SavedComparison } from "@/types/comparison";
 
-import { OUTPUT_UNIT_LABELS } from "@/lib/constants";
+import { getOutputUnitLabel } from "@/lib/constants";
 import { formatNumber, formatPercent, formatToman } from "@/lib/numberUtils";
 import {
   compareProducts,
@@ -133,7 +133,7 @@ export default function SavedComparisonCard({
                 {formatNumber(comparison.products.length)} محصول
               </span>
               <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                {OUTPUT_UNIT_LABELS[comparison.outputUnit]}
+                {getOutputUnitLabel(comparison.outputUnit)}
               </span>
             </div>
           </div>

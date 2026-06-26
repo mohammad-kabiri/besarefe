@@ -3,9 +3,6 @@ import type { MassUnit, Unit, UnitFamily, VolumeUnit } from "@/types/product";
 export const MASS_UNIT_TO_GRAM: Record<MassUnit, number> = {
   g: 1,
   kg: 1000,
-  mithqal: 4.608,
-  ounce: 28.3495,
-  pound: 453.592,
 };
 
 export const VOLUME_UNIT_TO_ML: Record<VolumeUnit, number> = {
@@ -30,8 +27,7 @@ export function getUnitFamily(unit: Unit): UnitFamily {
     return "volume";
   }
 
-  const exhaustiveCheck: never = unit;
-  return exhaustiveCheck;
+  throw new Error(`Unsupported unit: ${unit}`);
 }
 
 export function getBaseUnitLabel(family: UnitFamily): "g" | "ml" {

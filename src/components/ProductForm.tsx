@@ -290,6 +290,7 @@ function ProductFormInner({
             </FieldLabel>
 
             <CustomSelect<Unit>
+              helperText="واحدی را انتخاب کنید که روی بسته‌بندی نوشته شده است."
               id="product-unit"
               label="واحد"
               onChange={(nextUnit) => updateField("unit", nextUnit)}

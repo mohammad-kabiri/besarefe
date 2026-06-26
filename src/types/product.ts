@@ -1,6 +1,6 @@
 export type UnitFamily = "mass" | "volume";
 
-export type MassUnit = "g" | "kg" | "mithqal" | "ounce" | "pound";
+export type MassUnit = "g" | "kg";
 
 export type VolumeUnit = "ml" | "l";
 

@@ -2,7 +2,7 @@
 
 import type { ProductInput } from "@/types/product";
 
-import { DISCOUNT_TYPE_LABELS, UNIT_LABELS } from "@/lib/constants";
+import { DISCOUNT_TYPE_LABELS, getUnitLabel } from "@/lib/constants";
 import {
   applyDiscount,
   getDisplayName,
@@ -53,7 +53,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </h3>
           <div className="mt-2 flex flex-wrap gap-2">
             <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
-              {formatNumber(product.amount)} {UNIT_LABELS[product.unit]}
+              {formatNumber(product.amount)} {getUnitLabel(product.unit)}
             </span>
             {isDiscounted ? (
               <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">

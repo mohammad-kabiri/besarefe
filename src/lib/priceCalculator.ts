@@ -94,17 +94,12 @@ export function normalizeAmount(amount: number, unit: Unit): number {
   switch (unit) {
     case "g":
     case "kg":
-    case "mithqal":
-    case "ounce":
-    case "pound":
       return amount * MASS_UNIT_TO_GRAM[unit];
     case "ml":
     case "l":
       return amount * VOLUME_UNIT_TO_ML[unit];
-    default: {
-      const exhaustiveCheck: never = unit;
-      return exhaustiveCheck;
-    }
+    default:
+      throw new Error(`Unsupported unit: ${unit}`);
   }
 }
 

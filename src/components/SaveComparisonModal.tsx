@@ -5,7 +5,7 @@ import { useState } from "react";
 import type { SaveMode } from "@/types/comparison";
 import type { OutputUnit, ProductInput } from "@/types/product";
 
-import { OUTPUT_UNIT_LABELS } from "@/lib/constants";
+import { getOutputUnitLabel } from "@/lib/constants";
 import { formatNumber } from "@/lib/numberUtils";
 import { saveComparison } from "@/repositories/savedComparisonsRepository";
 
@@ -92,7 +92,7 @@ export default function SaveComparisonModal({
           </p>
           <p>
             واحد مقایسه:{" "}
-            <span className="font-black">{OUTPUT_UNIT_LABELS[outputUnit]}</span>
+            <span className="font-black">{getOutputUnitLabel(outputUnit)}</span>
           </p>
         </div>
 

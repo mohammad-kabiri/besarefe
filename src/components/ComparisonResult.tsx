@@ -4,7 +4,7 @@ import { useMemo } from "react";
 
 import type { ComparedProduct } from "@/types/product";
 
-import { OUTPUT_UNIT_LABELS } from "@/lib/constants";
+import { getOutputUnitLabel } from "@/lib/constants";
 import {
   compareProducts,
   getDisplayName,
@@ -70,7 +70,7 @@ export default function ComparisonResult() {
     () => getRecommendation(comparedProducts),
     [comparedProducts]
   );
-  const outputUnitLabel = OUTPUT_UNIT_LABELS[outputUnit];
+  const outputUnitLabel = getOutputUnitLabel(outputUnit);
 
   if (comparedProducts.length < 1 || recommendation === null) {
     return (
