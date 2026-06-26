@@ -1,4 +1,4 @@
-import type { OutputUnit, ProductInput, UnitFamily } from "@/types/product";
+import type { OutputUnit, ProductInput, Unit, UnitFamily } from "@/types/product";
 
 import { getOutputUnitFamily } from "@/lib/priceCalculator";
 import { getUnitFamily } from "@/lib/units";
@@ -15,6 +15,8 @@ export type ValidationResult = {
 
 const COMPATIBILITY_ERROR_MESSAGE =
   "واحد خروجی انتخاب‌شده با واحد برخی محصولات سازگار نیست. وزن و حجم بدون چگالی قابل تبدیل به هم نیستند.";
+const PRODUCT_UNIT_COMPATIBILITY_ERROR_MESSAGE =
+  "این محصول با واحد محصولات قبلی قابل مقایسه نیست. برای یک مقایسه دقیق، فقط محصولات وزنی را با وزنی یا محصولات حجمی را با حجمی مقایسه کنید.";
 
 function createValidationResult(errors: ValidationError[]): ValidationResult {
   return {
@@ -34,6 +36,14 @@ function isValidAmount(product: ProductInput): boolean {
 function getProductFamily(product: ProductInput): UnitFamily | null {
   try {
     return getUnitFamily(product.unit);
+  } catch {
+    return null;
+  }
+}
+
+function getUnitFamilySafely(unit: Unit): UnitFamily | null {
+  try {
+    return getUnitFamily(unit);
   } catch {
     return null;
   }
@@ -120,6 +130,61 @@ export function validateOutputUnitCompatibility(
     {
       field: "outputUnit",
       message: COMPATIBILITY_ERROR_MESSAGE,
+    },
+  ]);
+}
+
+export function validateProductUnitAgainstExistingProducts({
+  candidateUnit,
+  existingProducts,
+  editingProductId = null,
+}: {
+  candidateUnit: Unit;
+  existingProducts: ProductInput[];
+  editingProductId?: string | null;
+}): ValidationResult {
+  const candidateFamily = getUnitFamilySafely(candidateUnit);
+
+  if (candidateFamily === null) {
+    return createValidationResult([
+      {
+        field: "unit",
+        message: PRODUCT_UNIT_COMPATIBILITY_ERROR_MESSAGE,
+      },
+    ]);
+  }
+
+  const existingFamilies = existingProducts
+    .filter((product) => product.id !== editingProductId)
+    .map((product) => getProductFamily(product))
+    .filter((family): family is UnitFamily => family !== null);
+
+  if (existingFamilies.length === 0) {
+    return createValidationResult([]);
+  }
+
+  const hasMass = existingFamilies.includes("mass");
+  const hasVolume = existingFamilies.includes("volume");
+
+  if (hasMass && hasVolume) {
+    return createValidationResult([
+      {
+        field: "unit",
+        message: PRODUCT_UNIT_COMPATIBILITY_ERROR_MESSAGE,
+      },
+    ]);
+  }
+
+  const existingFamily: UnitFamily = hasMass ? "mass" : "volume";
+
+  if (candidateFamily === existingFamily) {
+    return createValidationResult([]);
+  }
+
+  return createValidationResult([
+    {
+      field: "unit",
+      message: PRODUCT_UNIT_COMPATIBILITY_ERROR_MESSAGE,
     },
   ]);
 }

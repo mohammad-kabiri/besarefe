@@ -13,7 +13,11 @@ import {
   INPUT_UNIT_OPTIONS,
 } from "@/lib/constants";
 import { parseLocalizedNumber } from "@/lib/numberUtils";
-import { validateProductInput, type ValidationError } from "@/lib/validation";
+import {
+  validateProductInput,
+  validateProductUnitAgainstExistingProducts,
+  type ValidationError,
+} from "@/lib/validation";
 import { useComparisonStore } from "@/store/comparisonStore";
 
 type ProductFormValues = {
@@ -129,6 +133,7 @@ export default function ProductForm() {
       editingProduct={editingProduct}
       editingProductId={editingProductId}
       key={formKey}
+      products={products}
     />
   );
 }
@@ -136,9 +141,11 @@ export default function ProductForm() {
 function ProductFormInner({
   editingProduct,
   editingProductId,
+  products,
 }: {
   editingProduct: ProductInput | null;
   editingProductId: string | null;
+  products: ProductInput[];
 }) {
   const addProduct = useComparisonStore((state) => state.addProduct);
   const updateProduct = useComparisonStore((state) => state.updateProduct);
@@ -181,9 +188,18 @@ function ProductFormInner({
       id: editingProductId ?? "draft-product",
     };
     const validation = validateProductInput(productForValidation);
+    const compatibilityValidation = validateProductUnitAgainstExistingProducts({
+      candidateUnit: productForValidation.unit,
+      existingProducts: products,
+      editingProductId,
+    });
+    const validationErrors = [
+      ...validation.errors,
+      ...compatibilityValidation.errors,
+    ];
 
-    if (!validation.valid) {
-      setErrors(validation.errors);
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
