@@ -2,6 +2,7 @@
 
 import type { OutputUnit } from "@/types/product";
 
+import CustomSelect from "@/components/ui/CustomSelect";
 import { OUTPUT_UNIT_OPTIONS } from "@/lib/constants";
 import { useComparisonStore } from "@/store/comparisonStore";
 
@@ -31,23 +32,15 @@ export default function OutputUnitSelector() {
         </div>
       </div>
 
-      <label className="block" htmlFor="output-unit">
-        <span className="mb-1 block text-sm font-bold text-slate-800">
-          محاسبه قیمت بر اساس
-        </span>
-        <select
-          className="h-13 min-h-13 w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 text-base font-bold text-[var(--color-text)] outline-none transition focus:border-[var(--color-primary)] focus:ring-4 focus:ring-teal-100"
+      <div>
+        <CustomSelect<OutputUnit>
           id="output-unit"
-          onChange={(event) => setOutputUnit(event.target.value as OutputUnit)}
+          label="واحد محاسبه قیمت"
+          onChange={setOutputUnit}
+          options={OUTPUT_UNIT_OPTIONS}
           value={outputUnit}
-        >
-          {OUTPUT_UNIT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
+        />
+      </div>
 
       <div className="mt-4 rounded-3xl border border-amber-200 bg-[var(--color-warning-soft)] px-4 py-3 text-sm leading-7 text-amber-800">
         محصولات وزنی را با واحد وزنی و محصولات حجمی را با واحد حجمی مقایسه

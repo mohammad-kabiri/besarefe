@@ -5,6 +5,7 @@ import { NumericFormat } from "react-number-format";
 
 import type { DiscountType, ProductInput, Unit } from "@/types/product";
 
+import CustomSelect from "@/components/ui/CustomSelect";
 import {
   DEFAULT_DISCOUNT_TYPE,
   DEFAULT_INPUT_UNIT,
@@ -288,22 +289,13 @@ function ProductFormInner({
               />
             </FieldLabel>
 
-            <FieldLabel htmlFor="product-unit" label="واحد">
-              <select
-                className={inputClassName}
-                id="product-unit"
-                onChange={(event) =>
-                  updateField("unit", event.target.value as Unit)
-                }
-                value={values.unit}
-              >
-                {INPUT_UNIT_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </FieldLabel>
+            <CustomSelect<Unit>
+              id="product-unit"
+              label="واحد"
+              onChange={(nextUnit) => updateField("unit", nextUnit)}
+              options={INPUT_UNIT_OPTIONS}
+              value={values.unit}
+            />
           </div>
         </FormGroup>
 
@@ -332,22 +324,15 @@ function ProductFormInner({
 
         <FormGroup title="تخفیف">
           <div className="grid gap-3 sm:grid-cols-2">
-            <FieldLabel htmlFor="discount-type" label="نوع تخفیف">
-              <select
-                className={inputClassName}
-                id="discount-type"
-                onChange={(event) =>
-                  updateField("discountType", event.target.value as DiscountType)
-                }
-                value={values.discountType}
-              >
-                {DISCOUNT_TYPE_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </FieldLabel>
+            <CustomSelect<DiscountType>
+              id="discount-type"
+              label="نوع تخفیف"
+              onChange={(nextDiscountType) =>
+                updateField("discountType", nextDiscountType)
+              }
+              options={DISCOUNT_TYPE_OPTIONS}
+              value={values.discountType}
+            />
 
             {values.discountType !== "none" ? (
               <FieldLabel

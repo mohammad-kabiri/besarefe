@@ -13,19 +13,19 @@ const steps = [
 export default function Home() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-5 px-4 py-5 sm:py-8">
-      <section className="overflow-hidden rounded-[2rem] border border-teal-100 bg-white p-5 shadow-sm sm:p-6">
+      <section className="overflow-hidden rounded-4xl border border-teal-100 bg-white p-5 shadow-sm sm:p-6">
         <div className="flex items-start gap-4">
-          <div className="hidden size-14 shrink-0 items-center justify-center rounded-3xl bg-[var(--color-primary-soft)] text-2xl font-black text-[var(--color-primary-strong)] sm:flex">
+          <div className="hidden size-14 shrink-0 items-center justify-center rounded-3xl bg(--color-primary-soft) text-2xl font-black text-(--color-primary-strong) sm:flex">
             ب
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-bold text-[var(--color-primary)]">
+            <p className="text-sm font-bold text-(--color-primary)">
               محصولات را وارد کن؛ بصرفه‌ترین گزینه را ببین.
             </p>
-            <h1 className="mt-1 text-3xl font-black text-[var(--color-text)] sm:text-4xl">
+            <h1 className="mt-1 text-3xl font-black text-foreground sm:text-4xl">
               بصرفه
             </h1>
-            <p className="mt-2 max-w-2xl text-base leading-8 text-[var(--color-muted)]">
+            <p className="mt-2 max-w-2xl text-base leading-8 text-(--color-muted)">
               محصولات را وارد کنید تا ببینید کدام گزینه واقعاً اقتصادی‌تر است.
               قیمت‌ها بر اساس وزن یا حجم یکسان محاسبه می‌شوند.
             </p>
@@ -35,7 +35,7 @@ export default function Home() {
         <ol className="mt-5 grid gap-2 sm:grid-cols-3">
           {steps.map((step, index) => (
             <li
-              className="flex items-center gap-2 rounded-2xl bg-[var(--color-surface-soft)] px-3 py-3 text-sm font-bold text-[var(--color-primary-strong)]"
+              className="flex items-center gap-2 rounded-2xl bg-(--color-surface-soft) px-3 py-3 text-sm font-bold text-(--color-primary-strong)"
               key={step}
             >
               <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white text-xs shadow-sm">
