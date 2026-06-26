@@ -1,4 +1,4 @@
-const CACHE_NAME = "besarefe-v1";
+const CACHE_NAME = "besarfe-v1";
 
 const APP_SHELL_URLS = ["/", "/saved", "/offline.html"];
 

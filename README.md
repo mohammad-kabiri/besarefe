@@ -1,4 +1,4 @@
-# بصرفه | Besarefe
+# بصرفه | Besarfe
 
 ## فارسی
 
@@ -109,21 +109,21 @@
 
 ---
 
-# Besarefe
+# Besarfe
 
 ## English
 
-**Besarefe** is a simple Persian price comparison tool that helps users compare products based on weight or volume.
+**Besarfe** is a simple Persian price comparison tool that helps users compare products based on weight or volume.
 
 You can enter several products, add their weight or volume, price, and discount, then see which option is actually more economical.
 
 ---
 
-## What does Besarefe do?
+## What does Besarfe do?
 
 Sometimes two products have different prices and different package sizes, making it difficult to know which one is the better deal.
 
-Besarefe converts product prices into a comparable unit price, making the comparison clearer and easier.
+Besarfe converts product prices into a comparable unit price, making the comparison clearer and easier.
 
 For example:
 
@@ -138,7 +138,7 @@ For example:
 
 ## What products is it useful for?
 
-Besarefe is designed for everyday packaged products, such as:
+Besarfe is designed for everyday packaged products, such as:
 
 - groceries
 - cooking oil
@@ -150,7 +150,7 @@ Besarefe is designed for everyday packaged products, such as:
 
 ## Supported units
 
-Besarefe currently supports:
+Besarfe currently supports:
 
 - gram
 - kilogram
@@ -167,7 +167,7 @@ But grams and liters cannot be accurately compared without knowing product densi
 
 ## Discounts
 
-Besarefe supports:
+Besarfe supports:
 
 - percentage discounts
 - fixed amount discounts
@@ -186,24 +186,24 @@ Saved data remains on the same device and browser.
 
 ## Privacy
 
-Besarefe does not require sign-up or login for normal use.
+Besarfe does not require sign-up or login for normal use.
 The information you enter is used for price comparison and remains locally on your device.
 
 ---
 
 ## Install on mobile
 
-Besarefe can be installed as a web app.
+Besarfe can be installed as a web app.
 
 ### Android
 
-1. Open Besarefe in Chrome.
+1. Open Besarfe in Chrome.
 2. Use the browser menu and choose Install or Add to Home Screen.
-3. The Besarefe icon will be added to your home screen.
+3. The Besarfe icon will be added to your home screen.
 
 ### iPhone
 
-1. Open Besarefe in Safari.
+1. Open Besarfe in Safari.
 2. Tap the Share button.
 3. Choose Add to Home Screen.
 4. Tap Add.
@@ -219,5 +219,5 @@ Saved comparisons are available only on the same device and browser where they w
 
 ## Important note
 
-Besarefe is a helper tool for making better shopping decisions.
+Besarfe is a helper tool for making better shopping decisions.
 The comparison result depends on the information entered by the user, including product amount, unit, price, and discount.
