@@ -71,15 +71,15 @@ export default function SaveComparisonModal({
       className="fixed inset-0 z-50 flex items-end bg-slate-950/55 p-3 sm:items-center sm:justify-center sm:p-4"
       role="dialog"
     >
-      <div className="max-h-[92vh] w-full overflow-y-auto rounded-[2rem] bg-white p-5 shadow-2xl sm:max-w-md sm:p-6">
+      <div className="max-h-[92vh] w-full overflow-y-auto rounded-4xl bg-white p-5 shadow-2xl sm:max-w-md sm:p-6">
         <div className="space-y-2">
           <h2
-            className="text-2xl font-black text-[var(--color-text)]"
+            className="text-2xl font-black text-foreground"
             id="save-comparison-title"
           >
             ذخیره مقایسه
           </h2>
-          <p className="text-sm leading-7 text-[var(--color-muted)]">
+          <p className="text-sm leading-7 text-(--color-muted)">
             می‌توانید همه محصولات را ذخیره کنید یا فقط گزینه بصرفه‌تر را نگه
             دارید.
           </p>
@@ -101,7 +101,7 @@ export default function SaveComparisonModal({
             عنوان ذخیره
           </span>
           <input
-            className="h-13 min-h-13 w-full rounded-2xl border border-[var(--color-border)] bg-white px-4 text-base font-medium text-[var(--color-text)] outline-none transition placeholder:text-slate-400 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-teal-100"
+            className="h-13 min-h-13 w-full rounded-2xl border border-(--color-border) bg-white px-4 text-base font-medium text-foreground outline-none transition placeholder:text-slate-400 focus:border-(--color-primary) focus:ring-4 focus:ring-teal-100"
             disabled={isSaving}
             id="save-title"
             onChange={(event) => setTitle(event.target.value)}
@@ -128,7 +128,7 @@ export default function SaveComparisonModal({
 
         <div className="mt-5 space-y-2">
           <button
-            className="min-h-13 w-full rounded-2xl bg-[var(--color-primary)] px-5 py-3 text-base font-black text-white shadow-sm transition hover:bg-[var(--color-primary-strong)] focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:bg-slate-300"
+            className="min-h-13 w-full rounded-2xl bg-(--color-primary) px-5 py-3 text-base font-black text-white shadow-sm transition hover:bg-(--color-primary-strong) focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:bg-slate-300"
             disabled={isSaving || !hasProducts}
             onClick={() => handleSave("all")}
             type="button"
@@ -137,7 +137,7 @@ export default function SaveComparisonModal({
           </button>
 
           <button
-            className="min-h-13 w-full rounded-2xl border border-teal-200 bg-teal-50 px-5 py-3 text-base font-black text-[var(--color-primary-strong)] transition hover:bg-teal-100 focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
+            className="min-h-13 w-full rounded-2xl border border-teal-200 bg-teal-50 px-5 py-3 text-base font-black text-(--color-primary-strong) transition hover:bg-teal-100 focus:outline-none focus:ring-4 focus:ring-teal-100 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
             disabled={isSaving || !hasProducts}
             onClick={() => handleSave("best-only")}
             type="button"
@@ -148,7 +148,7 @@ export default function SaveComparisonModal({
           </button>
 
           <button
-            className="min-h-13 w-full rounded-2xl border border-[var(--color-border)] bg-white px-5 py-3 text-base font-bold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-100 disabled:cursor-not-allowed disabled:text-slate-400"
+            className="min-h-13 w-full rounded-2xl border border-(--color-border) bg-white px-5 py-3 text-base font-bold text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-4 focus:ring-slate-100 disabled:cursor-not-allowed disabled:text-slate-400"
             disabled={isSaving}
             onClick={onClose}
             type="button"
